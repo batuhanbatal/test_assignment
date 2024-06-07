@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthFormRequest;
 use App\Models\User;
 use App\Traits\Responseable;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AuthFormRequest;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 
 class AuthController extends Controller
 {
@@ -29,9 +31,17 @@ class AuthController extends Controller
             ]);
         }
 
+        if ($user->subscription()->exists()) {
+            $userKey = 'chat' .  $user->id;
+            $remaining_limit = RateLimiter::remaining($userKey,  $user->subscription->product->rate_limit);
+        } else {
+            $remaining_limit = null;
+        }
+
         $response =
             [
                 'user' => $user,
+                'remaining_limit' => $remaining_limit,
                 'token' => $user->createToken('access_token')->plainTextToken,
             ];
 
