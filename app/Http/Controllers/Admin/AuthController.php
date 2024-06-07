@@ -24,7 +24,7 @@ class AuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->route('admin.dashboard');
         } else {
-            return "Kullanıcı adı şifre yanlış";
+            return redirect()->route('admin.login')->withErrors(['message' => 'Kullanıcı adı veya şifre yanlış']);
         }
     }
 
