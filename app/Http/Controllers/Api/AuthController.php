@@ -29,9 +29,12 @@ class AuthController extends Controller
             ]);
         }
 
-        return Responseable::success([
-            'user' => $user,
-            'token' => $user->createToken('access_token')->plainTextToken,
-        ], 'Token created.');
+        $response =
+            [
+                'user' => $user,
+                'token' => $user->createToken('access_token')->plainTextToken,
+            ];
+
+        return Responseable::success($response, 'Token created.');
     }
 }

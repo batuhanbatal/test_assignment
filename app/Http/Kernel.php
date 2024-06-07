@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\RedirectIfNotAdmin;
+use App\Http\Middleware\RateLimitMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,6 +65,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'chat.rate.limit' => \App\Http\Middleware\RateLimitMiddleware::class,
+        'chat.rate.limit' => RateLimitMiddleware::class,
+        'admin' => RedirectIfNotAdmin::class,
     ];
 }
