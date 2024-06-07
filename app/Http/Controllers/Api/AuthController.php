@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthFormRequest;
 use App\Models\User;
+use App\Traits\Responseable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use Responseable;
+
     public function index(AuthFormRequest $request)
     {
         $device_uuid = $request->input('device_uuid');
@@ -26,9 +29,9 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
+        return Responseable::success([
             'user' => $user,
             'token' => $user->createToken('access_token')->plainTextToken,
-        ]);
+        ], 'Token created.');
     }
 }

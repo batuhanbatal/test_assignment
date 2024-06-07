@@ -22,4 +22,9 @@ class User extends Authenticatable
         'device_name',
 
     ];
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
+    }
 }
